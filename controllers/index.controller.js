@@ -45,4 +45,23 @@ exports.usersignup = function(req, res){
     res.send("User Sign Up Page")
 };
 
+exports.submitlost = function(req, res){
+    res.send("User Submit Lost Page")
+};
+
+exports.submitfound = function(req, res){
+    res.send("User Submit Found Page")
+};
+
+exports.userfeedback = function(req, res){
+    res.send("User Feedback Page")
+};
+
+exports.userhistory = function(req, res){
+    res.send("User History Page")
+};
+
+exports.usereditprofile = function(req, res){
+    res.send("User Edit Profile Page")
+}
 
