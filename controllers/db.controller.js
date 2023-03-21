@@ -5,6 +5,7 @@ const app = express()
 const Admin = require("../models/admin.model")
 const User = require("../models/user.model")
 const Reward = require("../models/reward.model")
+const Address = require("ipaddr.js")
 
 
 
@@ -89,236 +90,232 @@ const addinRewardTable = (req , res) =>
 
 
 
-// //////--------------------------delete--------------------
-// const deleteFomUser = (req , res) =>
-// {sequelize.sync().then(() => {
+//////--------------------------delete--------------------
+const DeleteUser = (req , res) =>
+{sequelize.sync().then(() => {
 
-//     User.destroy({
-//         where: {
-//           id: 1
-//         }
-//     }).then(() => {
-//         console.log("Successfully deleted record.")
-//         res.send("deleted")
-//     }).catch((error) => {
-//         console.error('Failed to delete record : ', error);
-//         res.send("error")
-//     });
+    User.destroy({
+        where: {
+          username: req.body.id
+        }
+    }).then(() => {
+        console.log("User Successfully Deleted.")
+        res.send("deleted")
+    }).catch((error) => {
+        console.error('Unable to delete record : ', error);
+        res.send("error")
+    });
   
-//   }).catch((error) => {
-//       console.error('Unable to create table : ', error);
-//       res.send("table error")
-//   });
+  }).catch((error) => {
+      console.error('Unable to create table : ', error);
+      res.send("Table error")
+  });
 
-// }
+}
 
 
 
-// const deleteFomCars = (req , res) =>
-// {sequelize.sync().then(() => {
+const DeleteAdmin = (req , res) =>
+{sequelize.sync().then(() => {
 
-//     Cars.destroy({
-//         where: {
-//           id: 1
-//         }
-//     }).then(() => {
-//         console.log("Successfully deleted record.")
-//         res.send("deleted")
-//     }).catch((error) => {
-//         console.error('Failed to delete record : ', error);
-//         res.send("error")
-//     });
+    Admin.destroy({
+        where: {
+          username: req.body.id
+        }
+    }).then(() => {
+        console.log("Admin Successfully Deleted.")
+        res.send("deleted")
+    }).catch((error) => {
+        console.error('Failed to delete Admin : ', error);
+        res.send("error")
+    });
   
-//   }).catch((error) => {
-//       console.error('Unable to create table : ', error);
-//       res.send("table error")
-//   });
+  }).catch((error) => {
+      console.error('Unable to create table : ', error);
+      res.send("Table error")
+  });
 
-// }
+}
 
 
-// const deleteFomSpareParts = (req , res) =>
-// {sequelize.sync().then(() => {
+const DeleteReward = (req , res) =>
+{sequelize.sync().then(() => {
 
-//     spareParts.destroy({
-//         where: {
-//           id: 1
-//         }
-//     }).then(() => {
-//         console.log("Successfully deleted record.")
-//         res.send("deleted")
-//     }).catch((error) => {
-//         console.error('Failed to delete record : ', error);
-//         res.send("error")
-//     });
+    Reward.destroy({
+        where: {
+          reward_id: req.body.r_id
+        }
+    }).then(() => {
+        console.log("Reward Successfully Deleted.")
+        res.send("deleted")
+    }).catch((error) => {
+        console.error('Failed to delete Reward : ', error);
+        res.send("error")
+    });
   
-//   }).catch((error) => {
-//       console.error('Unable to create table : ', error);
-//       res.send("table error")
-//   });
+  }).catch((error) => {
+      console.error('Unable to create table : ', error);
+      res.send("table error")
+  });
 
-// }
+}
 
 
 
-// /////////----------------------UPDATE------------------
-// const upadteSpareParts = (req , res) =>
-// {
-// sequelize.sync().then(() =>
-// {
-//     spareParts.update(
-//         {
-//             model: 2017,
-//         },
-//         {
-//             where:{ id : 1},
-//         }
-//     ).then(() =>{
-//          console.log(" upadted data ")
-//          res.send("updated")
-//     }).catch((error) =>
-//     {console.error(" error update " , error);
-//     res.send("error");
-//     });
+/////////----------------------UPDATE------------------
+const updateAdminPass = (req , res) =>
+{
+sequelize.sync().then(() =>
+{
+    Admin.update(
+        {
+            password: req.body.pass,
+        },
+        {
+            where:{ username : req.body.id},
+        }
+    ).then(() =>{
+         console.log(" Admin Updated ")
+         res.send("updated")
+    }).catch((error) =>
+    {console.error(" error update " , error);
+    res.send("error");
+    });
     
-//     }).catch((error) => {
-//         console.error('table not create : ', error);
-//         res.send("table error")
-// });
+    }).catch((error) => {
+        console.error('table not create : ', error);
+        res.send("table error")
+});
 
-// }
+}
 
 
-// const upadteCars = (req , res) =>
-// {
-//     sequelize.sync().then(() =>{
-//     Cars.update(
-//         {
-//             price: 8000000,
-//         },
-//         {
-//             where:{ id : 2},
-//         }
-//     ).then(() =>{
-//          console.log(" upadted data ")
-//          res.send("updated")
-//     }).catch((error) =>
-//     {
-//         console.error(" error update " , error);
-//         res.send("error");
-//     });
+const UpdateUser = (req , res) =>
+{
+    sequelize.sync().then(() =>{
+    user.update(
+        {
+            password: req.body.id,
+        },
+        {
+            where:{ username : req.body.name},
+        }
+    ).then(() =>{
+         console.log(" User Data Updated ")
+         res.send("updated")
+    }).catch((error) =>
+    {
+        console.error(" error update " , error);
+        res.send("error");
+    });
     
-//     }).catch((error) => {
-//         console.error('cannot update : ', error);
-//         res.send("table error");
-// });
+    }).catch((error) => {
+        console.error('cannot update : ', error);
+        res.send("table error");
+});
 
-// }
+}
 
 
-// const upadteUsers = (req , res) =>
-// {
-//     sequelize.sync().then(() =>{
-//     User.update(
-//         {
-//             UserID: 4111,
-//         },
-//         {
-//             where:{ id : 1},
-//         }
-//     ).then(() =>{
-//          console.log(" upadted data ")
-//          res.send("updated")
-//     }).catch((error) =>
-//     {
-//         console.error(" error update " , error);
-//         res.send("error")
-//     });
+const UpdatReward = (req , res) =>
+{
+    sequelize.sync().then(() =>{
+    Reward.update(
+        {
+            reward_fee: req.body.fee,
+        },
+        {
+            where:{ reward_id : req.body.id},
+        }
+    ).then(() =>{
+         console.log(" upadted data ")
+         res.send("updated")
+    }).catch((error) =>
+    {
+        console.error(" error update " , error);
+        res.send("error")
+    });
     
-//     }).catch((error) => {
-//         console.error('cannot update : ', error);
-//         res.send("table error")
-// });
-// }
+    }).catch((error) => {
+        console.error('cannot update : ', error);
+        res.send("table error")
+});
+}
 
-// ////-------------------Retrive------------------
+////-------------------Retrive------------------
 
-// const retriveteUsers = (req , res) =>
-// {
-// sequelize.sync().then(() => {
+const GetUser = (req , res) =>
+{
+sequelize.sync().then(() => {
 
-//     User.findOne({
-//         where: {
-//             id : "1"
-//         }
-//     }).then(rs => {
-//         console.log(rs)
-//         res.send("data get")
-//     }).catch((error) => {
-//         console.error('Failed to retrieve data : ', error);
-//         res.send("error")
-//     });
+    User.findOne({
+        where: {
+            username : req.body.name
+        }
+    }).then(rs => {
+        console.log(rs)
+        res.send("Retrieved Data")
+    }).catch((error) => {
+        console.error('Failed to retrieve data : ', error);
+        res.send("error")
+    });
 
-// }).catch((error) => {
-//     console.error('Unable to create table : ', error);
-//     res.send("table error")
-// });
-
-
-// }
-
-// const retriveteCars= (req , res) =>
-// {
-// sequelize.sync().then(() => {
-
-//     User.findOne({
-//         where: {
-//             id : "1"
-//         }
-//     }).then(rs => {
-//         console.log(rs)
-//         res.send("data get")
-//     }).catch((error) => {
-//         console.error('Failed to retrieve data : ', error);
-//         res.send("error")
-//     });
-
-// }).catch((error) => {
-//     console.error('Unable to create table : ', error);
-//     res.send("table error")
-// });
-
-// }
+}).catch((error) => {
+    console.error('Unable to create table : ', error);
+    res.send("table error")
+});
 
 
-// const retriveteSpareParts= (req , res) =>
-// {
-//     sequelize.sync().then(() => {
+}
 
-//         User.findOne({
-//             where: {
-//                 id : "1"
-//             }
-//         }).then(rs => {
-//             console.log(rs)
-//             res.send("data get")
-//         }).catch((error) => {
-//             console.error('Failed to retrieve data : ', error);
-//             res.send("error")
-//         });
+const GetReward= (req , res) =>
+{
+sequelize.sync().then(() => {
+
+    Reward.findOne({
+        where: {
+            reward_id : req.body.id
+        }
+    }).then(rs => {
+        console.log(rs)
+        res.send("Retrieved Data")
+    }).catch((error) => {
+        console.error('Failed to retrieve data : ', error);
+        res.send("error")
+    });
+
+}).catch((error) => {
+    console.error('Unable to create table : ', error);
+    res.send("table error")
+});
+
+}
+
+
+const GetAdmin= (req , res) =>
+{
+    sequelize.sync().then(() => {
+
+        Admin.findOne({
+            where: {
+                username : req.body.name
+            }
+        }).then(rs => {
+            console.log(rs)
+            res.send("Data Reterived")
+        }).catch((error) => {
+            console.error('Failed to retrieve data : ', error);
+            res.send("error")
+        });
      
-//      }).catch((error) => {
-//         console.error('Unable to create table : ', error);
-//         res.send("table error")
-//      });
+     }).catch((error) => {
+        console.error('Unable to create table : ', error);
+        res.send("table error")
+     });
 
-// }
-
-
+}
 
 
-module.exports = {addInUserTable , addInAdminTable , addinRewardTable}
-// deleteFomCars , deleteFomSpareParts , deleteFomUser,
-// upadteCars , upadteSpareParts , upadteUsers,
-// retriveteCars , retriveteSpareParts , retriveteUsers
-// }
+
+
+module.exports = {addInUserTable , addInAdminTable , addinRewardTable,GetAdmin,GetReward,GetUser,DeleteAdmin,DeleteUser,DeleteReward}

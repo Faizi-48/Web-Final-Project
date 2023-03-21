@@ -5,27 +5,19 @@ const router = express.Router()
 
 const Table = require("../controllers/db.controller");
 
-// Create a new Tutorial
+// Create a new Table And Add Data
 router.post("/add-admin", Table.addInAdminTable);
 router.post("/add-user", Table.addInUserTable);
 router.post("/add-reward", Table.addinRewardTable);
 
-// // Retrieve all Tutorials
-// router.get("/", tutorials.findAll);
+//Retreiveing Data
+router.post("/search-admin", Table.GetAdmin);
+router.post("/search-user", Table.GetUser);
+router.post("/search-reward", Table.GetReward);
 
-// // Retrieve all published Tutorials
-// router.get("/published", tutorials.findAllPublished);
-
-// // Retrieve a single Tutorial with id
-// router.get("/:id", tutorials.findOne);
-
-// // Update a Tutorial with id
-// router.put("/:id", tutorials.update);
-
-// // Delete a Tutorial with id
-// router.delete("/:id", tutorials.delete);
-
-// // Delete all Tutorials
-// router.delete("/", tutorials.deleteAll);
+//Deleting Data
+router.post("/del-admin", Table.DeleteAdmin);
+router.post("/del-user", Table.DeleteUser);
+router.post("/del-reward", Table.DeleteReward);
 
 module.exports = router;
