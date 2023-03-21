@@ -35,7 +35,72 @@ Router.get('/admin/ApproveItems', (req, res) => {
 
 })
 
+Router.get('/admin/viewlost', (req, res) => {
 
+  adminviewlost(req,res)
+
+})
+
+Router.get('/admin/adminhistory', (req, res) => {
+
+  adminhistory(req,res)
+
+})
+
+
+Router.get('/admin/adminfeedback', (req, res) => {
+
+  adminfeedback(req,res)
+
+})
+
+
+//User URLs
+
+
+Router.get('/signup', (req, res) => {
+
+  usersignup(req,res)
+
+})
+
+Router.get('/user/submitlost', (req, res) => {
+
+  submitlost(req,res)
+
+})
+
+
+Router.get('/user/submitfound', (req, res) => {
+
+  submitfound(req,res)
+
+})
+
+Router.get('/user/home', (req, res) => {
+
+  userhome(req,res)
+
+})
+
+Router.get('/user/editprofile', (req, res) => {
+
+  usereditprofile(req,res)
+
+})
+
+Router.get('/user/feedback', (req, res) => {
+
+  userfeedback(req,res)
+
+})
+
+
+Router.get('/user/history', (req, res) => {
+
+  userhistory(req,res)
+
+})
 
 
 module.exports=Router;
