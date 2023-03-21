@@ -2,9 +2,16 @@
 const sequelize = require("../config/db.config")
 const express = require('express')
 const app = express()
+
 const Admin = require("../models/admin.model")
 const User = require("../models/user.model")
 const Reward = require("../models/reward.model")
+
+const Chat = require("../models/chat.model")
+const Complain = require("../models/complain.model")
+const Comment = require("../models/comment.model")
+
+
 const Address = require("ipaddr.js")
 
 
@@ -90,6 +97,90 @@ const addinRewardTable = (req , res) =>
 
 
 
+const addinChatTable = (req , res) =>
+{
+    sequelize.sync().then(() => {
+        console.log('Chat Table Created!');
+     
+        Chat.create({
+            chat_id: req.body.id,
+            user1: req.body.u1,
+            user2: req.body.u2,
+        }).then(rs => {
+            console.log(rs)
+            res.send("saved")
+        }).catch((error) => {
+            console.error('Failed to Connect Chat: ', error);
+            res.send("error")
+        });
+     
+     }).catch((error) => {
+        console.error('Unable to create Table : ', error);
+        res.send(" Table error")
+     });
+     
+
+}
+
+
+
+const addinCommentTable = (req , res) =>
+{
+    sequelize.sync().then(() => {
+        console.log('Comment Table Created!');
+     
+        Comment.create({
+            comment_id: req.body.id,
+            user_id: req.body.userid,
+            item_id: req.body.itemId,
+            comment:req.body.comm,
+        }).then(rs => {
+            console.log(rs)
+            res.send("saved")
+        }).catch((error) => {
+            console.error('Failed to Add Comment: ', error);
+            res.send("error")
+        });
+     
+     }).catch((error) => {
+        console.error('Unable to create Table : ', error);
+        res.send(" Table error")
+     });
+     
+
+}
+
+
+
+const addinComplainTable = (req , res) =>
+{
+    sequelize.sync().then(() => {
+        console.log('Complain Table Created!');
+     
+        Complain.create({
+            complain_id: req.body.id,
+            user_id: req.body.userid,
+            description:req.body.desc,
+        }).then(rs => {
+            console.log(rs)
+            res.send("saved")
+        }).catch((error) => {
+            console.error('Failed to Add Complain: ', error);
+            res.send("error")
+        });
+     
+     }).catch((error) => {
+        console.error('Unable to create Table : ', error);
+        res.send(" Table error")
+     });
+     
+
+}
+
+
+
+
+
 //////--------------------------delete--------------------
 const DeleteUser = (req , res) =>
 {sequelize.sync().then(() => {
@@ -159,6 +250,78 @@ const DeleteReward = (req , res) =>
   });
 
 }
+
+
+
+const DeleteChat= (req , res) =>
+{sequelize.sync().then(() => {
+
+    Chat.destroy({
+        where: {
+          chat_id: req.body.r_id
+        }
+    }).then(() => {
+        console.log("Chat Successfully Deleted.")
+        res.send("deleted")
+    }).catch((error) => {
+        console.error('Failed to delete Chat : ', error);
+        res.send("error")
+    });
+  
+  }).catch((error) => {
+      console.error('Unable to create table : ', error);
+      res.send("table error")
+  });
+
+}
+
+
+const DeleteComment = (req , res) =>
+{sequelize.sync().then(() => {
+
+    Comment.destroy({
+        where: {
+          comment_id: req.body.r_id
+        }
+    }).then(() => {
+        console.log("Comment Successfully Deleted.")
+        res.send("deleted")
+    }).catch((error) => {
+        console.error('Failed to delete Comment : ', error);
+        res.send("error")
+    });
+  
+  }).catch((error) => {
+      console.error('Unable to create table : ', error);
+      res.send("table error")
+  });
+
+}
+
+
+const DeleteComplain = (req , res) =>
+{sequelize.sync().then(() => {
+
+    Complain.destroy({
+        where: {
+          complain_id: req.body.r_id
+        }
+    }).then(() => {
+        console.log("Complain Successfully Deleted.")
+        res.send("deleted")
+    }).catch((error) => {
+        console.error('Failed to delete Complain : ', error);
+        res.send("error")
+    });
+  
+  }).catch((error) => {
+      console.error('Unable to create table : ', error);
+      res.send("table error")
+  });
+
+}
+
+
 
 
 
@@ -242,6 +405,62 @@ const UpdatReward = (req , res) =>
 });
 }
 
+
+const UpdateComment = (req , res) =>
+{
+    sequelize.sync().then(() =>{
+    Comment.update(
+        {
+            comment: req.body.desc,
+        },
+        {
+            where:{ comment_id : req.body.id},
+        }
+    ).then(() =>{
+         console.log(" upadted data ")
+         res.send("updated")
+    }).catch((error) =>
+    {
+        console.error(" error update " , error);
+        res.send("error")
+    });
+    
+    }).catch((error) => {
+        console.error('cannot update : ', error);
+        res.send("table error")
+});
+}
+
+
+const UpdateComplain = (req , res) =>
+{
+    sequelize.sync().then(() =>{
+    Complain.update(
+        {
+            description: req.body.desc,
+        },
+        {
+            where:{ complain_id : req.body.id},
+        }
+    ).then(() =>{
+         console.log(" upadted data ")
+         res.send("updated")
+    }).catch((error) =>
+    {
+        console.error(" error update " , error);
+        res.send("error")
+    });
+    
+    }).catch((error) => {
+        console.error('cannot update : ', error);
+        res.send("table error")
+});
+}
+
+
+
+
+
 ////-------------------Retrive------------------
 
 const GetUser = (req , res) =>
@@ -317,5 +536,84 @@ const GetAdmin= (req , res) =>
 
 
 
+const GetChat= (req , res) =>
+{
+    sequelize.sync().then(() => {
 
-module.exports = {addInUserTable , addInAdminTable , addinRewardTable,GetAdmin,GetReward,GetUser,DeleteAdmin,DeleteUser,DeleteReward}
+        Chat.findOne({
+            where: {
+                chat_id : req.body.id
+            }
+        }).then(rs => {
+            console.log(rs)
+            res.send("Chat Reterived")
+        }).catch((error) => {
+            console.error('Failed to retrieve Chat : ', error);
+            res.send("error")
+        });
+     
+     }).catch((error) => {
+        console.error('Unable to create table : ', error);
+        res.send("table error")
+     });
+
+}
+
+
+const GetComment= (req , res) =>
+{
+    sequelize.sync().then(() => {
+
+        Comment.findOne({
+            where: {
+                comment_id : req.body.id
+            }
+        }).then(rs => {
+            console.log(rs)
+            res.send("Comment Reterived")
+        }).catch((error) => {
+            console.error('Failed to retrieve Comment : ', error);
+            res.send("error")
+        });
+     
+     }).catch((error) => {
+        console.error('Unable to create table : ', error);
+        res.send("table error")
+     });
+
+}
+
+
+const GetComplain= (req , res) =>
+{
+    sequelize.sync().then(() => {
+
+        Complain.findOne({
+            where: {
+                complain_id : req.body.id
+            }
+        }).then(rs => {
+            console.log(rs)
+            res.send("Complain Reterived")
+        }).catch((error) => {
+            console.error('Failed to retrieve Complain : ', error);
+            res.send("error")
+        });
+     
+     }).catch((error) => {
+        console.error('Unable to create table : ', error);
+        res.send("table error")
+     });
+
+}
+
+
+
+
+
+module.exports = {addInUserTable , addInAdminTable , addinRewardTable,
+GetAdmin,GetReward,GetUser,DeleteAdmin,DeleteUser,DeleteReward,UpdatReward,
+updateAdminPass,UpdateUser,addinChatTable,addinCommentTable,addinComplainTable,
+GetChat,GetComment,GetComplain,DeleteChat,DeleteComment,DeleteComplain,UpdateComment,
+UpdateComplain
+}
