@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+//Autharization
+const {isAdmin} = require("../middlewares/auth.middle")
 
 
 const Table = require("../controllers/db.controller");
@@ -22,8 +24,8 @@ router.post("/add-like", Table.addinLikeTable);
 
 
 //Updating Data
-
-router.post("/update-admin", Table.updateAdminPass);
+//Adding Authorization
+router.post("/update-admin", isAdmin, Table.updateAdminPass);
 router.post("/update-user", Table.UpdateUser);
 router.post("/update-reward", Table.UpdatReward);
 

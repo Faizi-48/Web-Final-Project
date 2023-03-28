@@ -2,6 +2,7 @@
 const sequelize = require("../config/db.config")
 const express = require('express')
 const app = express()
+const Token = require("jsonwebtoken");
 
 const Admin = require("../models/admin.model")
 const User = require("../models/user.model")
@@ -787,7 +788,12 @@ const GetAdmin= (req , res) =>
             }
         }).then(rs => {
             console.log(rs)
-            res.send("Data Reterived")
+            var token = Token.sign({username : req.body.name , Role : "admin"}, 'abcdef')
+            res.status(200).send({ 
+                username: token.username,
+                roles: token.Role,
+                accessToken: token
+              });
         }).catch((error) => {
             console.error('Failed to retrieve data : ', error);
             res.send("error")
