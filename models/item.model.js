@@ -26,7 +26,7 @@ const { Sequelize, DataTypes } = require("sequelize");
         type:Sequelize.BOOLEAN,
       },
       date: {
-        type:Sequelize.date,
+        type:Sequelize.STRING,
       },
       image:{
         type:Sequelize.STRING,

@@ -1,8 +1,9 @@
 const sequelize = require("../config/db.config")
 const { Sequelize, DataTypes, Model } = require("sequelize");
-    const Like = sequelize.define("like_dislike", {
+    const Like = sequelize.define("like_dislikes", {
       id: {
         type: Sequelize.INTEGER,
+        primaryKey:true,
       },
       item_id: {
         type: Sequelize.INTEGER,

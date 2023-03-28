@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.use('/', userroute)
 
-app.listen(8080, () => {
+app.listen(3000, () => {
     console.log('Running');
 })
 
