@@ -3,6 +3,7 @@ const sequelize = require("../config/db.config")
 const express = require('express')
 const app = express()
 const Token = require("jsonwebtoken");
+const {Op} = require("sequelize");
 
 const Admin = require("../models/admin.model")
 const User = require("../models/user.model")
@@ -957,6 +958,64 @@ const GetLikes= (req , res) =>
 
 }
 
+//Pagination
+
+const getPagination = (page) => {
+    const limit = 5;
+    const offset = page ? page * limit : 0;
+    return { limit, offset };
+  };
+  
+  const itemPagination = (req, res) => {
+     const { page } = req.query;
+     const { limit, offset } = getPagination(page);
+    sequelize
+      .sync()
+      .then(() => {
+        Item.findAll( { limit , offset})
+          .then((data) => {      
+            res.send(data);
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error("Failed to retrieve Items : ", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+      });
+  };
+
+
+  //Filter Items
+
+
+  const filterItems = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+          Item.findAll({
+          where: {
+            id: {
+              [Op.between]: [req.body.fromid, req.body.toid]
+            }
+          }
+        })
+          .then((data) => {
+            console.log(data);
+            res.send(data);
+          })
+          .catch((error) => {
+            console.error("Failed to retrieve data : ", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+      });
+  };
+
+
+
 
 
 
@@ -967,5 +1026,6 @@ GetAdmin,GetReward,GetUser,DeleteAdmin,DeleteUser,DeleteReward,UpdatReward,
 updateAdminPass,UpdateUser,addinChatTable,addinCommentTable,addinComplainTable,
 GetChat,GetComment,GetComplain,DeleteChat,DeleteComment,DeleteComplain,UpdateComment,
 UpdateComplain,addinFeedbackTable,addinItemTable,addinLikeTable,GetFeedback,GetItem,
-GetLikes,updateFeedback,updateItem,updateLikes,DeleteFeedback,DeleteItem,DeleteLike
+GetLikes,updateFeedback,updateItem,updateLikes,DeleteFeedback,DeleteItem,DeleteLike,
+itemPagination,filterItems
 }

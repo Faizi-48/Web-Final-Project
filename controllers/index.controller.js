@@ -62,6 +62,7 @@ exports.userhistory = function(req, res){
 };
 
 exports.usereditprofile = function(req, res){
-    res.send("User Edit Profile Page")
+    res.send("User Edit Profile Page")
 }
+
 

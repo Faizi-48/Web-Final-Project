@@ -1,7 +1,7 @@
 const express = require('express')
 
 const Router=express.Router();
-const {login, adminhome ,about,viewUser,approveitems,adminviewlost,adminhistory,adminfeedback, usersignup,submitlost,submitfound,userhome,usereditprofile,userfeedback,userhistory} = require("../controllers/index.controller");
+const {login, adminhome ,about,viewUser,approveitems,adminviewlost,adminhistory,adminfeedback, usersignup,submitlost,submitfound,userhome,usereditprofile,userfeedback,userhistory, NotFound} = require("../controllers/index.controller");
 
 
 
@@ -101,6 +101,8 @@ Router.get('/user/history', (req, res) => {
   userhistory(req,res)
 
 })
+
+
 
 
 module.exports=Router;

@@ -73,4 +73,23 @@ router.post("/del-like", Table.DeleteLike);
 router.post("/del-item", Table.DeleteItem);
 
 
+//Pagination
+router.get("/itempage",Table.itemPagination)
+
+
+
+//Filtering
+router.get("/filterItem",Table.filterItems)
+
+
+
+//Error
+
+
+router.get('*',function(req,res){
+
+    res.send('Bhai Kidhar??',404);
+})
+
+
 module.exports = router;
