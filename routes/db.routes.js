@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
+const checkDup = require("../middlewares/error.js") 
 //Autharization
 const {isAdmin} = require("../middlewares/auth.middle")
 
@@ -25,52 +25,52 @@ router.post("/add-like", Table.addinLikeTable);
 
 //Updating Data
 //Adding Authorization
-router.post("/update-admin", isAdmin, Table.updateAdminPass);
-router.post("/update-user", Table.UpdateUser);
-router.post("/update-reward", Table.UpdatReward);
+router.put("/update-admin", isAdmin, Table.updateAdminPass);
+router.put("/update-user", Table.UpdateUser);
+router.put("/update-reward", Table.UpdatReward);
 
 
-router.post("/update-comment", Table.UpdateComment);
-router.post("/update-complain", Table.UpdateComplain);
+router.put("/update-comment", Table.UpdateComment);
+router.put("/update-complain", Table.UpdateComplain);
 
 
 
-router.post("/update-feedback", Table.updateFeedback);
-router.post("/update-item", Table.updateItem);
-router.post("/update-like", Table.updateLikes);
+router.put("/update-feedback", Table.updateFeedback);
+router.put("/update-item", Table.updateItem);
+router.put("/update-like", Table.updateLikes);
 
 
 //Retreiveing Data
-router.post("/search-admin", Table.GetAdmin);
-router.post("/search-user", Table.GetUser);
-router.post("/search-reward", Table.GetReward);
+router.get("/search-admin", Table.GetAdmin);
+router.get("/search-user", Table.GetUser);
+router.get("/search-reward", Table.GetReward);
 
 
-router.post("/search-chat", Table.GetChat);
-router.post("/search-comment", Table.GetComment);
-router.post("/search-complain", Table.GetComplain);
+router.get("/search-chat", Table.GetChat);
+router.get("/search-comment", Table.GetComment);
+router.get("/search-complain", Table.GetComplain);
 
 
 
-router.post("/search-feedback", Table.GetFeedback);
-router.post("/search-item", Table.GetItem);
-router.post("/search-like", Table.GetLikes);
+router.get("/search-feedback", Table.GetFeedback);
+router.get("/search-item", Table.GetItem);
+router.get("/search-like", Table.GetLikes);
 
 //Deleting Data
-router.post("/del-admin", Table.DeleteAdmin);
-router.post("/del-user", Table.DeleteUser);
-router.post("/del-reward", Table.DeleteReward);
+router.delete("/del-admin", Table.DeleteAdmin);
+router.delete("/del-user", Table.DeleteUser);
+router.delete("/del-reward", Table.DeleteReward);
 
 
-router.post("/del-chat", Table.DeleteChat);
-router.post("/del-complain", Table.DeleteComplain);
-router.post("/del-comment", Table.DeleteComment);
+router.delete("/del-chat", Table.DeleteChat);
+router.delete("/del-complain", Table.DeleteComplain);
+router.delete("/del-comment", Table.DeleteComment);
 
 
 
-router.post("/del-feedback", Table.DeleteFeedback);
-router.post("/del-like", Table.DeleteLike);
-router.post("/del-item", Table.DeleteItem);
+router.delete("/del-feedback", Table.DeleteFeedback);
+router.delete("/del-like", Table.DeleteLike);
+router.delete("/del-item", Table.DeleteItem);
 
 
 //Pagination

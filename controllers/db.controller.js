@@ -3,6 +3,7 @@ const sequelize = require("../config/db.config")
 const express = require('express')
 const app = express()
 const Token = require("jsonwebtoken");
+const errorHandler = require("../utils/errorHandler.js");
 const {Op} = require("sequelize");
 
 const Admin = require("../models/admin.model")
@@ -26,704 +27,679 @@ const Address = require("ipaddr.js")
 
 
 ////---------------------ADD----------------
-const addInAdminTable = (req , res) =>
-{
-    console.log( "body" , req.body.id);
- sequelize.sync().then(() => {
-    console.log('Admin Table Created!');
- 
-    Admin.create({
+const addInAdminTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Admin table created successfully!");
+  
+      const admin = await Admin.create({
         username: req.body.id,
         password: req.body.pass
-    }).then(rs => {
-        console.log("added")
-        res.send(rs)
-    }).catch((error) => {
-        console.error('Failed to create a new record : ', error);
-    });
- 
- }).catch((error) => {
-    console.error('Unable to create table : ', error);
- });
+      });
+      console.log(admin);
+      res.send(admin);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
- 
 
-}
 
-const addInUserTable = (req , res) =>
-{
-sequelize.sync().then(() => {
-    console.log('User Table Created!');
- 
-    User.create({
+  const addInUserTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Users table created successfully!");
+  
+      const user = await User.create({
         username: req.body.name,
         password: req.body.pass,
         contact: req.body.number,
         email: req.body.mail,
         address: req.body.home,
         zipcode:req.body.code
-    }).then(rs => {
-        console.log("added")
-        res.send(rs)
-    }).catch((error) => {
-        console.error('Failed to Add User   : ', error);
-        res.send("error")
-    });
- 
- }).catch((error) => {
-    console.error('Unable to create table : ', error);
-    res.send("table error")
+      });
+      console.log(user);
+      res.send(user);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
- });
 
-}
 
-const addinRewardTable = (req , res) =>
-{
-    sequelize.sync().then(() => {
-        console.log('Reward Table Created!');
-     
-        Reward.create({
+  const addinChatTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Chat table created successfully!");
+  
+      const chat = await Chat.create({
+        chat_id: req.body.id,
+        user1: req.body.u1,
+        user2: req.body.u2,
+      });
+      console.log(chat);
+      res.send(chat);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
+
+
+
+  const addinCommentTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Chat table created successfully!");
+  
+      const comment = await Comment.create({
+        comment_id: req.body.id,
+        user_id: req.body.userid,
+        item_id: req.body.itemId,
+        comment:req.body.comm,
+      
+      });
+      console.log(comment);
+      res.send(comment);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
+
+
+  const addinComplainTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Complain table created successfully!");
+  
+      const complain = await Complain.create({
+        complain_id: req.body.id,
+        user_id: req.body.userid,
+        description:req.body.desc,
+      
+      });
+      console.log(complain);
+      res.send(complain);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
+
+
+
+
+  const addinFeedbackTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Complain table created successfully!");
+  
+      const feedback = await Feedback.create({
+        f_id: req.body.id,
+        user_id: req.body.userid,
+        description:req.body.desc,
+      
+      });
+      console.log(feedback);
+      res.send(feedback);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
+
+
+
+  const addinItemTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Complain table created successfully!");
+  
+      const item = await Item.create({
+        item_id: req.body.id,
+        user_id: req.body.userid,
+        item_name:req.body.name,
+        location:req.body.loc,
+        brand:req.body.brand,
+        color:req.body.colour,
+        description:req.body.desc,
+        status:req.body.stts,
+        date:req.body.date,
+        image:req.body.img,
+      
+      });
+      console.log(item);
+      res.send(item);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
+
+
+  const addinRewardTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Complain table created successfully!");
+  
+      const reward = await Reward.create({
             reward_id: req.body.id,
             reward_fee: req.body.fee,
             item_id: req.body.item,
-        }).then(rs => {
-            console.log("Added")
-            res.send(rs)
-        }).catch((error) => {
-            console.error('Failed to Add Reward: ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create Table : ', error);
-        res.send(" Table error")
-     });
-     
-
-}
-
-
-
-const addinChatTable = (req , res) =>
-{
-    sequelize.sync().then(() => {
-        console.log('Chat Table Created!');
-     
-        Chat.create({
-            chat_id: req.body.id,
-            user1: req.body.u1,
-            user2: req.body.u2,
-        }).then(rs => {
-            console.log("added")
-            res.send(rs)
-        }).catch((error) => {
-            console.error('Failed to Connect Chat: ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create Table : ', error);
-        res.send(" Table error")
-     });
-     
-
-}
-
-
-
-const addinCommentTable = (req , res) =>
-{
-    sequelize.sync().then(() => {
-        console.log('Comment Table Created!');
-     
-        Comment.create({
-            comment_id: req.body.id,
-            user_id: req.body.userid,
-            item_id: req.body.itemId,
-            comment:req.body.comm,
-        }).then(rs => {
-            console.log("added")
-            res.send(rs)
-        }).catch((error) => {
-            console.error('Failed to Add Comment: ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create Table : ', error);
-        res.send(" Table error")
-     });
-     
-
-}
-
-
-
-const addinComplainTable = (req , res) =>
-{
-    sequelize.sync().then(() => {
-        console.log('Complain Table Created!');
-     
-        Complain.create({
-            complain_id: req.body.id,
-            user_id: req.body.userid,
-            description:req.body.desc,
-        }).then(rs => {
-            console.log("added")
-            res.send(rs)
-        }).catch((error) => {
-            console.error('Failed to Add Complain: ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create Table : ', error);
-        res.send(" Table error")
-     });
-     
-
-}
+      });
+      console.log(reward);
+      res.send(reward);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
 
 
-const addinFeedbackTable = (req , res) =>
-{
-    sequelize.sync().then(() => {
-        console.log('Feedback Table Created!');
-     
-        Feedback.create({
-            f_id: req.body.id,
-            user_id: req.body.userid,
-            description:req.body.desc,
-        }).then(rs => {
-            console.log("save")
-            res.send(rs)
-        }).catch((error) => {
-            console.error('Failed to Add Feedback: ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create Table : ', error);
-        res.send(" Table error")
-     });
-     
-
-}
-
-
-
-const addinItemTable = (req , res) =>
-{
-    sequelize.sync().then(() => {
-        console.log('Item Table Created!');
-     
-        Item.create({
-            item_id: req.body.id,
-            user_id: req.body.userid,
-            item_name:req.body.name,
-            location:req.body.loc,
-            brand:req.body.brand,
-            color:req.body.colour,
-            description:req.body.desc,
-            status:req.body.stts,
-            date:req.body.date,
-            image:req.body.img,
-        
-
-        }).then(rs => {
-            console.log("added")
-            res.send(rs)
-        }).catch((error) => {
-            console.error('Failed to Add Item: ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create Table : ', error);
-        res.send(" Table error")
-     });
-     
-
-}
-
-
-
-
-
-const addinLikeTable = (req , res) =>
-{
-    sequelize.sync().then(() => {
-        console.log('Like Table Created!');
-     
-        Like.create({
-            id: req.body.l_id,
-            item_id: req.body.i_id,
-            user_id: req.body.userid,
-            likes:req.body.like,
-            dislike:req.body.dislikes,
-        }).then(rs => {
-            console.log("added")
-            res.send(rs)
-        }).catch((error) => {
-            console.error('Failed to Add Like/Dislike: ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create Table : ', error);
-        res.send(" Table error")
-     });
-     
-
-}
-
-
-
-
-//////--------------------------delete--------------------
-const DeleteUser = (req , res) =>
-{sequelize.sync().then(() => {
-
-    User.destroy({
-        where: {
-          username: req.body.id
-        }
-    }).then(() => {
-        console.log("User Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Unable to delete record : ', error);
-        res.send("error")
-    });
+  const addinLikeTable = async function(req, res) {
+    try {
+      await sequelize.sync();
+      console.log("Complain table created successfully!");
   
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("Table error")
-  });
-
-}
-
-
-
-const DeleteAdmin = (req , res) =>
-{sequelize.sync().then(() => {
-
-    Admin.destroy({
-        where: {
-          username: req.body.id
-        }
-    }).then(() => {
-        console.log("Admin Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Failed to delete Admin : ', error);
-        res.send("error")
-    });
-  
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("Table error")
-  });
-
-}
-
-
-const DeleteReward = (req , res) =>
-{sequelize.sync().then(() => {
-
-    Reward.destroy({
-        where: {
-          reward_id: req.body.r_id
-        }
-    }).then(() => {
-        console.log("Reward Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Failed to delete Reward : ', error);
-        res.send("error")
-    });
-  
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("table error")
-  });
-
-}
-
-
-
-const DeleteChat= (req , res) =>
-{sequelize.sync().then(() => {
-
-    Chat.destroy({
-        where: {
-          chat_id: req.body.id
-        }
-    }).then(() => {
-        console.log("Chat Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Failed to delete Chat : ', error);
-        res.send("error")
-    });
-  
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("table error")
-  });
-
-}
-
-
-const DeleteComment = (req , res) =>
-{sequelize.sync().then(() => {
-
-    Comment.destroy({
-        where: {
-          comment_id: req.body.id
-        }
-    }).then(() => {
-        console.log("Comment Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Failed to delete Comment : ', error);
-        res.send("error")
-    });
-  
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("table error")
-  });
-
-}
-
-
-const DeleteComplain = (req , res) =>
-{sequelize.sync().then(() => {
-
-    Complain.destroy({
-        where: {
-          complain_id: req.body.r_id
-        }
-    }).then(() => {
-        console.log("Complain Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Failed to delete Complain : ', error);
-        res.send("error")
-    });
-  
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("table error")
-  });
-
-}
-
-
-
-
-const DeleteFeedback = (req , res) =>
-{sequelize.sync().then(() => {
-
-    Feedback.destroy({
-        where: {
-          f_id: req.body.id
-        }
-    }).then(() => {
-        console.log("Feedback Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Failed to delete Feedback : ', error);
-        res.send("error")
-    });
-  
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("table error")
-  });
-
-}
-
-
-const DeleteItem = (req , res) =>
-{sequelize.sync().then(() => {
-
-    Item.destroy({
-        where: {
-          item_id: req.body.id
-        }
-    }).then(() => {
-        console.log("Item Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Failed to delete Item : ', error);
-        res.send("error")
-    });
-  
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("table error")
-  });
-
-}
-
-
-
-
-const DeleteLike = (req , res) =>
-{sequelize.sync().then(() => {
-
-    Like.destroy({
-        where: {
-          id: req.body.r_id
-        }
-    }).then(() => {
-        console.log("Like/Dislike Successfully Deleted.")
-        res.send("deleted")
-    }).catch((error) => {
-        console.error('Failed to delete Like/Dislike : ', error);
-        res.send("error")
-    });
-  
-  }).catch((error) => {
-      console.error('Unable to create table : ', error);
-      res.send("table error")
-  });
-
-}
+      const like = await Like.create({
+        id: req.body.l_id,
+        item_id: req.body.i_id,
+        user_id: req.body.userid,
+        likes:req.body.like,
+        dislike:req.body.dislikes,
+      });
+      console.log(like);
+      res.send(like);
+    } catch (error) {
+      console.error("Failed to create a new record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
 
 
 
+//////--------------------------Delete--------------------
+
+const DeleteUser = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        User.destroy({
+          where: {
+            username: req.body.id,
+          },
+        })
+          .then((data) => {
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }; 
+
+
+
+
+  const DeleteAdmin = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        Admin.destroy({
+          where: {
+            username: req.body.id
+          },
+        })
+          .then((data) => {
+            console.log("data"+data)
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }; 
+
+
+
+  const DeleteReward = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        Reward.destroy({
+          where: {
+            reward_id: req.body.r_id
+          },
+        })
+          .then((data) => {
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }; 
+
+
+
+
+  const DeleteChat = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        Chat.destroy({
+          where: {
+            chat_id: req.body.id
+          },
+        })
+          .then((data) => {
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }; 
+
+
+
+  const DeleteComment = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        Comment.destroy({
+          where: {
+            comment_id: req.body.id
+          },
+        })
+          .then((data) => {
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }; 
+
+
+
+  const DeleteComplain = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        Complain.destroy({
+          where: {
+            complain_id: req.body.r_id
+          },
+        })
+          .then((data) => {
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }; 
+
+
+
+
+
+  const DeleteFeedback  = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        Feedback.destroy({
+          where: {
+            f_id: req.body.id
+          },
+        })
+          .then((data) => {
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }; 
+
+
+  const DeleteItem  = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        Item.destroy({
+          where: {
+            item_id: req.body.id
+          },
+        })
+          .then((data) => {
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }; 
+
+
+
+
+  const DeleteLike  = (req, res) => {
+    sequelize
+      .sync()
+      .then(() => {
+        Like.destroy({
+          where: {
+            id: req.body.r_id
+          },
+        })
+          .then((data) => {
+            if (!data) {
+              console.log("Data With This ID Not Found ");
+              res.send(new error("Invalid ID" , 400))
+            }
+            else
+            {
+            console.log("Successfully deleted record.");
+            res.send("Deleted");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to delete record : ", error);
+            res.send("error");
+          });
+      })
+      .catch((error) => {
+        console.error("Unable to create table : ", error);
+        res.send("table error");
+      });
+  }
 
 
 
 
 
 /////////----------------------UPDATE------------------
-const updateAdminPass = (req , res) =>
-{
-sequelize.sync().then(() =>
-{
-    Admin.update(
+
+const updateAdminPass = async function(req, res) {
+    try {
+      await sequelize.sync();
+  
+      const admin = await Admin.update(
         {
             password: req.body.pass,
         },
         {
             where:{ username : req.body.id},
-        }
-    ).then(() =>{
-         console.log(" Admin Updated ")
-         res.send("updated")
-    }).catch((error) =>
-    {console.error(" error update " , error);
-    res.send("error");
-    });
-    
-    }).catch((error) => {
-        console.error('table not create : ', error);
-        res.send("table error")
-});
-
-}
+        });
+      console.log(admin);
+      res.send(admin);
+    } catch (error) {
+      console.error("Failed to Update Record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
-const UpdateUser = (req , res) =>
-{
-    sequelize.sync().then(() =>{
-    user.update(
+
+
+const UpdateUser = async function(req, res) {
+    try {
+      await sequelize.sync();
+  
+      const user = await User.update(
         {
-            password: req.body.id,
+            password: req.body.pass,
         },
         {
             where:{ username : req.body.name},
-        }
-    ).then(() =>{
-         console.log(" User Data Updated ")
-         res.send("updated")
-    }).catch((error) =>
-    {
-        console.error(" error update " , error);
-        res.send("error");
-    });
-    
-    }).catch((error) => {
-        console.error('cannot update : ', error);
-        res.send("table error");
-});
-
-}
+        });
+      console.log(user);
+      res.send(user);
+    } catch (error) {
+      console.error("Failed to Update Record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
-const UpdatReward = (req , res) =>
-{
-    sequelize.sync().then(() =>{
-    Reward.update(
+  const UpdatReward = async function(req, res) {
+    try {
+      await sequelize.sync();
+  
+      const reward = await Reward.update(
         {
             reward_fee: req.body.fee,
         },
         {
             where:{ reward_id : req.body.id},
-        }
-    ).then(() =>{
-         console.log(" updated data ")
-         res.send("updated")
-    }).catch((error) =>
-    {
-        console.error(" error update " , error);
-        res.send("error")
-    });
-    
-    }).catch((error) => {
-        console.error('cannot update : ', error);
-        res.send("table error")
-});
-}
+        });
+      console.log(reward);
+      res.send(reward);
+    } catch (error) {
+      console.error("Failed to Update Record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
-
-const UpdateComment = (req , res) =>
-{
-    sequelize.sync().then(() =>{
-    Comment.update(
+  const UpdateComment = async function(req, res) {
+    try {
+      await sequelize.sync();
+  
+      const comment = await Comment.update(
         {
             comment: req.body.desc,
         },
         {
             where:{ comment_id : req.body.id},
-        }
-    ).then(() =>{
-         console.log(" upadted data ")
-         res.send("updated")
-    }).catch((error) =>
-    {
-        console.error(" error update " , error);
-        res.send("error")
-    });
-    
-    }).catch((error) => {
-        console.error('cannot update : ', error);
-        res.send("table error")
-});
-}
+        });
+      console.log(comment);
+      res.send(comment);
+    } catch (error) {
+      console.error("Failed to Update Record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
-const UpdateComplain = (req , res) =>
-{
-    sequelize.sync().then(() =>{
-    Complain.update(
+
+  const UpdateComplain = async function(req, res) {
+    try {
+      await sequelize.sync();
+  
+      const complain = await Complain.update(
         {
             description: req.body.desc,
         },
         {
             where:{ complain_id : req.body.id},
-        }
-    ).then(() =>{
-         console.log(" upadted data ")
-         res.send("updated")
-    }).catch((error) =>
-    {
-        console.error(" error update " , error);
-        res.send("error")
-    });
-    
-    }).catch((error) => {
-        console.error('cannot update : ', error);
-        res.send("table error")
-});
-}
+        });
+      console.log(complain);
+      res.send(complain);
+    } catch (error) {
+      console.error("Failed to Update Record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
 
 
 
-const updateFeedback = (req , res) =>
-{
-sequelize.sync().then(() =>
-{
-    Feedback.update(
+  const updateFeedback = async function(req, res) {
+    try {
+      await sequelize.sync();
+  
+      const feedback = await Feedback.update(
         {
             description: req.body.desc,
         },
         {
             where:{ f_id : req.body.id},
-        }
-    ).then(() =>{
-         console.log(" Feedback Updated ")
-         res.send("updated")
-    }).catch((error) =>
-    {console.error(" error update " , error);
-    res.send("error");
-    });
-    
-    }).catch((error) => {
-        console.error('table not create : ', error);
-        res.send("table error")
-});
-
-}
+        });
+      console.log(feedback);
+      res.send(feedback);
+    } catch (error) {
+      console.error("Failed to Update Record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
 
 
-const updateItem = (req , res) =>
-{
-sequelize.sync().then(() =>
-{
-    Item.update(
+  const updateItem = async function(req, res) {
+    try {
+      await sequelize.sync();
+  
+      const item = await Item.update(
         {
             item_name: req.body.name,
         },
         {
             where:{ item_id : req.body.id},
-        }
-    ).then(() =>{
-         console.log(" Item Updated ")
-         res.send("updated")
-    }).catch((error) =>
-    {console.error(" error update " , error);
-    res.send("error");
-    });
-    
-    }).catch((error) => {
-        console.error('table not create : ', error);
-        res.send("table error")
-});
-
-}
+        });
+      console.log(item);
+      res.send(item);
+    } catch (error) {
+      console.error("Failed to Update Record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
-const updateLikes = (req , res) =>
-{
-sequelize.sync().then(() =>
-{
-    Like.update(
+
+  const updateLikes = async function(req, res) {
+    try {
+      await sequelize.sync();
+  
+      const like = await Like.update(
         {
             likes: req.body.like,
         },
         {
             where:{ id : req.body.id},
-        }
-    ).then(() =>{
-         console.log(" Likes Updated ")
-         res.send("updated")
-    }).catch((error) =>
-    {console.error(" error update " , error);
-    res.send("error");
-    });
-    
-    }).catch((error) => {
-        console.error('table not create : ', error);
-        res.send("table error")
-});
-
-}
-
+        });
+      console.log(like);
+      res.send(like);
+    } catch (error) {
+      console.error("Failed to Update Record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 
 
@@ -731,232 +707,341 @@ sequelize.sync().then(() =>
 
 ////-------------------Retrive------------------
 
-const GetUser = (req , res) =>
-{
-sequelize.sync().then(() => {
 
-    User.findOne({
-        where: {
+
+const GetUser = async (req, res) => {
+    try{
+      await sequelize
+      .sync()
+      .then(async() => {
+          await User.findOne({
+          where: {
             username : req.body.name
-        }
-    }).then(rs => {
-        console.log(rs)
-        res.send("Retrieved Data")
-    }).catch((error) => {
-        console.error('Failed to retrieve data : ', error);
-        res.send("error")
-    });
+          }
+        })
+          .then((data) => {
+            if(!data)
+            {
+              res.send(new errorHandler("Cannot Find Data " , 404))
+            }
+            else{
+            console.log("Data Found.");
+            res.status(200).send(data);
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+      });
+    }catch{
+      console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
-}).catch((error) => {
-    console.error('Unable to create table : ', error);
-    res.send("table error")
-});
+  
 
-
-}
-
-const GetReward= (req , res) =>
-{
-sequelize.sync().then(() => {
-
-    Reward.findOne({
-        where: {
+  const GetReward = async (req, res) => {
+    try{
+      await sequelize
+      .sync()
+      .then(async() => {
+          await Reward.findOne({
+          where: {
             reward_id : req.body.id
-        }
-    }).then(rs => {
-        console.log(rs)
-        res.send("Retrieved Data")
-    }).catch((error) => {
-        console.error('Failed to retrieve data : ', error);
-        res.send("error")
-    });
+          }
+        })
+          .then((data) => {
+            if(!data)
+            {
+              res.send(new errorHandler("Cannot Find Data " , 404))
+            }
+            else{
+            console.log("Data Found.");
+            res.status(200).send(data);
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+      });
+    }catch{
+      console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
-}).catch((error) => {
-    console.error('Unable to create table : ', error);
-    res.send("table error")
-});
-
-}
 
 
-const GetAdmin= (req , res) =>
-{
-    sequelize.sync().then(() => {
-
-        Admin.findOne({
-            where: {
+  const GetAdmin = async (req, res) => {
+        try{
+          await sequelize
+          .sync()
+          .then(async() => {
+              await Admin.findOne({
+              where: {
                 username : req.body.name
-            }
-        }).then(rs => {
-            console.log(rs)
-            var token = Token.sign({username : req.body.name , Role : "admin"}, 'abcdef')
-            res.status(200).send({ 
-                username: token.username,
-                roles: token.Role,
-                accessToken: token
+              }
+            })
+              .then((data) => {
+                if(!data)
+                {
+                  res.send(new errorHandler("Cannot Find Data " , 404))
+                }
+                else{
+                console.log("Data Found.");
+                var token = Token.sign({username : req.body.name , Role : "admin"}, 'abcdef')
+                //console.log(token)
+                res.status(200).send(data,{ 
+                    username: token.username,
+                    roles: token.Role,
+                    accessToken: token
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error("Failed to Get record : ", error);
+          res.status(500).send(error.message);
               });
-        }).catch((error) => {
-            console.error('Failed to retrieve data : ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create table : ', error);
-        res.send("table error")
-     });
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+          res.status(500).send(error.message);
+          });
+        }catch{
+          console.error("Failed to Get record : ", error);
+          res.status(500).send(error.message);
+        }
+      };
+    
 
-}
 
-
-
-const GetChat= (req , res) =>
-{
-    sequelize.sync().then(() => {
-
-        Chat.findOne({
-            where: {
-                chat_id : req.body.id
+  const GetChat = async (req, res) => {
+    try{
+      await sequelize
+      .sync()
+      .then(async() => {
+          await Chat.findOne({
+          where: {
+            chat_id : req.body.id
+          }
+        })
+          .then((data) => {
+            if(!data)
+            {
+              res.send(new errorHandler("Cannot Find Data " , 404))
             }
-        }).then(rs => {
-            console.log(rs)
-            res.send("Chat Reterived")
-        }).catch((error) => {
-            console.error('Failed to retrieve Chat : ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create table : ', error);
-        res.send("table error")
-     });
-
-}
-
-
-const GetComment= (req , res) =>
-{
-    sequelize.sync().then(() => {
-
-        Comment.findOne({
-            where: {
-                comment_id : req.body.id
+            else{
+            console.log("Data Found.");
+            res.status(200).send(data);
             }
-        }).then(rs => {
-            console.log(rs)
-            res.send("Comment Reterived")
-        }).catch((error) => {
-            console.error('Failed to retrieve Comment : ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create table : ', error);
-        res.send("table error")
-     });
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+      });
+    }catch{
+      console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
-}
 
-
-const GetComplain= (req , res) =>
-{
-    sequelize.sync().then(() => {
-
-        Complain.findOne({
-            where: {
-                complain_id : req.body.id
+  const GetComment = async (req, res) => {
+    try{
+      await sequelize
+      .sync()
+      .then(async() => {
+          await Comment.findOne({
+          where: {
+            comment_id : req.body.id
+          }
+        })
+          .then((data) => {
+            if(!data)
+            {
+              res.send(new errorHandler("Cannot Find Data " , 404))
             }
-        }).then(rs => {
-            console.log(rs)
-            res.send("Complain Reterived")
-        }).catch((error) => {
-            console.error('Failed to retrieve Complain : ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create table : ', error);
-        res.send("table error")
-     });
-
-}
-
-
-
-
-const GetFeedback= (req , res) =>
-{
-    sequelize.sync().then(() => {
-
-        Feedback.findOne({
-            where: {
-                f_id : req.body.id
+            else{
+            console.log("Data Found.");
+            res.status(200).send(data);
             }
-        }).then(rs => {
-            console.log(rs)
-            res.send("Feedback Reterived")
-        }).catch((error) => {
-            console.error('Failed to retrieve Feedback : ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create table : ', error);
-        res.send("table error")
-     });
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+      });
+    }catch{
+      console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
-}
 
-
-
-
-const GetItem= (req , res) =>
-{
-    sequelize.sync().then(() => {
-
-        Item.findOne({
-            where: {
-                item_id : req.body.id
+  const GetComplain = async (req, res) => {
+    try{
+      await sequelize
+      .sync()
+      .then(async() => {
+          await Complain.findOne({
+          where: {
+            complain_id : req.body.id
+          }
+        })
+          .then((data) => {
+            if(!data)
+            {
+              res.send(new errorHandler("Cannot Find Data " , 404))
             }
-        }).then(rs => {
-            console.log(rs)
-            res.send("Item Reterived")
-        }).catch((error) => {
-            console.error('Failed to retrieve Item : ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create table : ', error);
-        res.send("table error")
-     });
-
-}
-
-
-
-
-const GetLikes= (req , res) =>
-{
-    sequelize.sync().then(() => {
-
-        Like.findOne({
-            where: {
-                id : req.body.l_id
+            else{
+            console.log("Data Found.");
+            res.status(200).send(data);
             }
-        }).then(rs => {
-            console.log(rs)
-            res.send("Likes Reterived")
-        }).catch((error) => {
-            console.error('Failed to retrieve Likes : ', error);
-            res.send("error")
-        });
-     
-     }).catch((error) => {
-        console.error('Unable to create table : ', error);
-        res.send("table error")
-     });
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+      });
+    }catch{
+      console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
-}
+
+
+  const GetFeedback = async (req, res) => {
+    try{
+      await sequelize
+      .sync()
+      .then(async() => {
+          await Feedback.findOne({
+          where: {
+            f_id : req.body.id
+          }
+        })
+          .then((data) => {
+            if(!data)
+            {
+              res.send(new errorHandler("Cannot Find Data " , 404))
+            }
+            else{
+            console.log("Data Found.");
+            res.status(200).send(data);
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+      });
+    }catch{
+      console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
+
+
+
+  const GetItem = async (req, res) => {
+    try{
+      await sequelize
+      .sync()
+      .then(async() => {
+          await Item.findOne({
+          where: {
+            item_id : req.body.id
+          }
+        })
+          .then((data) => {
+            if(!data)
+            {
+              res.send(new errorHandler("Cannot Find Data " , 404))
+            }
+            else{
+            console.log("Data Found.");
+            res.status(200).send(data);
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+      });
+    }catch{
+      console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
+
+
+  const GetLikes = async (req, res) => {
+    try{
+      await sequelize
+      .sync()
+      .then(async() => {
+          await Like.findOne({
+          where: {
+            id : req.body.l_id
+          }
+        })
+          .then((data) => {
+            if(!data)
+            {
+              res.send(new errorHandler("Cannot Find Data " , 404))
+            }
+            else{
+            console.log("Data Found.");
+            res.status(200).send(data);
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+      });
+    }catch{
+      console.error("Failed to Get record : ", error);
+      res.status(500).send(error.message);
+    }
+  };
 
 //Pagination
 
@@ -988,35 +1073,44 @@ const getPagination = (page) => {
 
 
   //Filter Items
+ 
 
-
-  const filterItems = (req, res) => {
-    sequelize
-      .sync()
-      .then(() => {
-          Item.findAll({
-          where: {
-            id: {
-              [Op.between]: [req.body.fromid, req.body.toid]
-            }
+  const filterItems = async (req, res) => {
+  try{
+    await sequelize
+    .sync()
+    .then(async() => {
+        await Item.findAll({
+        where: {
+          price: {
+            [Op.between]: [ req.body.fromid, req.body.toid]
+          }
+        }
+      })
+        .then((data) => {
+          if(!data)
+          {
+            res.send(new errorHandler("Cannot Filter data " , 404))
+          }
+          else{
+          console.log("Data Filtered.");
+          res.status(200).send(data);
           }
         })
-          .then((data) => {
-            console.log(data);
-            res.send(data);
-          })
-          .catch((error) => {
-            console.error("Failed to retrieve data : ", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Unable to create table : ", error);
-      });
-  };
-
-
-
-
+        .catch((error) => {
+          console.error("Failed to filter record : ", error);
+    res.status(500).send(error.message);
+        });
+    })
+    .catch((error) => {
+      console.error("Failed to filter record : ", error);
+    res.status(500).send(error.message);
+    });
+  }catch{
+    console.error("Failed to filter record : ", error);
+    res.status(500).send(error.message);
+  }
+};
 
 
 
